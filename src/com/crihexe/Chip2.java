@@ -3,20 +3,20 @@ package com.crihexe;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
+
+import javax.swing.JComponent;
 
 import com.crihexe.utils.Graphic;
 import com.crihexe.utils.Pin;
 import com.crihexe.utils.PinList;
 
-public class Chip implements MouseListener, MouseMotionListener {
+public class Chip2 extends JComponent {
+	private static final long serialVersionUID = -7203478579244939406L;
 	
 	private static final int pinWidth = 7;
 	private static final int pinWidthPadding = 10;
@@ -35,27 +35,55 @@ public class Chip implements MouseListener, MouseMotionListener {
 	
 	private static final Font CHIP_FONT = Graphic.CHIP_FONT.deriveFont(22f);
 	
+	private boolean rotated = false;
+	
 	private String name = "CHIP";
 	private PinList<Pin> inputs = new PinList<Pin>(true);
 	private PinList<Pin> outputs = new PinList<Pin>(false);
 	
-	public BufferedImage paint() {
-		
+	public Chip2() {
+		super();
+	}
+	
+	public void setRotated(boolean rotated) {
+		this.rotated = rotated;
+	}
+	
+	public boolean isRotated() {
+		return rotated;
+	}
+	float a = 0;
+	@Override
+	public void paintComponent(Graphics g2) {
 		PinList<Pin> maxPins = getMaxPins();
 		PinList<Pin> minPins = getMinPins();
 		
+		if(maxPins.size() <= 0) return;
+		
 		int chipWidth = maxPins.size() * pinBoxWidth;
 		
-		FontMetrics metrics = new BufferedImage(1, 1, BufferedImage.TYPE_INT_BGR).getGraphics().getFontMetrics(CHIP_FONT);
+		FontMetrics metrics = g2.getFontMetrics(CHIP_FONT);
 		int textWidth = metrics.stringWidth(getName()) + 2*textPadding;
 		if(textWidth + 2*orientingDotPadding + orientingDotSize > chipWidth) chipWidth = textWidth;
 		
 		int height = chipHeight + 2*pinHeight;
 		
-		BufferedImage image = new BufferedImage(chipWidth, height, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D g = image.createGraphics();
+		Graphics2D g = (Graphics2D) g2;
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 	    g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+	    a+=Math.PI/16f;
+	    if(rotated) {
+	    	//setBounds(getX(), getY(), height, chipWidth);
+			System.out.println(height + " " + chipWidth + " - " + getWidth() + " " + getHeight());
+			g.translate(-chipWidth/4, height/2);
+			g.rotate(a, chipWidth/2, height/2);
+			
+		} else {
+			//setBounds(getX(), getY(), chipWidth, height);
+			g.rotate(a, chipWidth/2, height/2);
+		}
+	    
+	    
 		
 		int chipX = 0;
 		int chipY = pinHeight;
@@ -111,7 +139,17 @@ public class Chip implements MouseListener, MouseMotionListener {
 			}
 		}
 		
-		return image;
+		if(rotated) {
+	    	setBounds(getX(), getY(), height, chipWidth);
+			System.out.println(height + " " + chipWidth + " - " + getWidth() + " " + getHeight());
+			//g.rotate(a, height/2, chipWidth/2);
+		} else {
+			setBounds(getX(), getY(), chipWidth, height);
+			//g.rotate(a, chipWidth/2, height/2);
+		}
+		
+		g.setColor(Color.magenta);
+	    g.fillRect(0, 0, 10, 5);
 	}
 	
 	public void setName(String name) {
@@ -159,25 +197,5 @@ public class Chip implements MouseListener, MouseMotionListener {
 	public int outputSize() {
 		return outputs.size();
 	}
-
-	@Override
-	public void mouseMoved(MouseEvent e) {
-		
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		
-	}
-
-	@Override public void mouseEntered(MouseEvent e) {}
-	@Override public void mouseDragged(MouseEvent e) {}
-	@Override public void mouseClicked(MouseEvent e) {}
-	@Override public void mouseExited(MouseEvent e) {}
 	
 }

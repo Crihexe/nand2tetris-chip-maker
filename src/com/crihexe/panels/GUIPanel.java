@@ -14,14 +14,11 @@ import com.crihexe.Chip;
 public class GUIPanel extends JPanel implements KeyListener {
 	private static final long serialVersionUID = -8233090345447455418L;
 	
-	private ChipLookPanel chipLookPanel;
+	private ChipLookPanel2 chipLookPanel;
 	private ChipInsidePanel chipInsidePanel;
 	
 	private Chip chip;
 
-	/**
-	 * Create the panel.
-	 */
 	public GUIPanel() {
 		setFocusable(true);
 		addKeyListener(this);
@@ -30,7 +27,7 @@ public class GUIPanel extends JPanel implements KeyListener {
 		
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		
-		chipLookPanel = new ChipLookPanel(chip, this);
+		chipLookPanel = new ChipLookPanel2();
 		chipLookPanel.setBackground(new Color(92, 92, 92));
 		
 		JPanel chipCodePanel = new JPanel();
@@ -59,7 +56,7 @@ public class GUIPanel extends JPanel implements KeyListener {
 	}
 	
 	public void init() {
-		chipLookPanel.init();
+		//chipLookPanel.init();
 		chipInsidePanel.init();
 	}
 
@@ -82,6 +79,8 @@ public class GUIPanel extends JPanel implements KeyListener {
 			chipLookPanel.addInput("a");
 		if(e.getKeyCode() == KeyEvent.VK_O)
 			chipLookPanel.addOutput("a");
+		if(e.getKeyCode() == KeyEvent.VK_R)
+			chipLookPanel.rotateChip();
 		
 		repaint();
 	}
