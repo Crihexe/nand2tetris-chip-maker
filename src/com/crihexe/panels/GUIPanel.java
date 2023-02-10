@@ -81,6 +81,10 @@ public class GUIPanel extends JPanel implements KeyListener {
 			chipLookPanel.addOutput("a");
 		if(e.getKeyCode() == KeyEvent.VK_R)
 			chipLookPanel.rotateChip();
+		if(e.getKeyCode() == KeyEvent.VK_L) {
+			chipLookPanel.a();
+			return;
+		}
 		
 		repaint();
 	}

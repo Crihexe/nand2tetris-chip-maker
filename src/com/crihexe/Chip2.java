@@ -35,6 +35,7 @@ public class Chip2 extends JComponent {
 	
 	private static final Font CHIP_FONT = Graphic.CHIP_FONT.deriveFont(22f);
 	
+	private boolean wasRotated = false;
 	private boolean rotated = false;
 	
 	private String name = "CHIP";
@@ -55,6 +56,7 @@ public class Chip2 extends JComponent {
 	float a = 0;
 	@Override
 	public void paintComponent(Graphics g2) {
+		super.paintComponent(g2);
 		PinList<Pin> maxPins = getMaxPins();
 		PinList<Pin> minPins = getMinPins();
 		
@@ -71,19 +73,18 @@ public class Chip2 extends JComponent {
 		Graphics2D g = (Graphics2D) g2;
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 	    g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-	    a+=Math.PI/16f;
+	    
 	    if(rotated) {
-	    	//setBounds(getX(), getY(), height, chipWidth);
-			System.out.println(height + " " + chipWidth + " - " + getWidth() + " " + getHeight());
-			g.translate(-chipWidth/4, height/2);
-			g.rotate(a, chipWidth/2, height/2);
+			g.translate(height, 0);
+			//g.scale(1, -1);
+			g.rotate(a);
 			
-		} else {
-			//setBounds(getX(), getY(), chipWidth, height);
-			g.rotate(a, chipWidth/2, height/2);
 		}
 	    
+	    g.setColor(Color.magenta);
+	    g.fillRect(0, 0, 5, 1000);
 	    
+	    setBackground(Color.magenta);
 		
 		int chipX = 0;
 		int chipY = pinHeight;
@@ -141,15 +142,16 @@ public class Chip2 extends JComponent {
 		
 		if(rotated) {
 	    	setBounds(getX(), getY(), height, chipWidth);
-			System.out.println(height + " " + chipWidth + " - " + getWidth() + " " + getHeight());
-			//g.rotate(a, height/2, chipWidth/2);
 		} else {
 			setBounds(getX(), getY(), chipWidth, height);
-			//g.rotate(a, chipWidth/2, height/2);
 		}
 		
-		g.setColor(Color.magenta);
-	    g.fillRect(0, 0, 10, 5);
+		
+	}
+	
+	public void setA() {
+		a+=Math.PI/16f;
+		
 	}
 	
 	public void setName(String name) {

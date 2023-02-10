@@ -1,5 +1,6 @@
 package com.crihexe.panels;
 
+import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -36,8 +37,14 @@ public class ChipLookPanel2 extends JPanel implements KeyListener {
 		}*/;
 		//chip.setRotated(true);
 		chip.setBounds(100, 10, 100, 100);
+		chip.setBackground(Color.magenta);
 		add(chip);
 		
+	}
+	
+	public void a() {
+		chip.setA();
+		repaint();
 	}
 	
 	public void addInput(String s) {
